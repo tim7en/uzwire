@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Home · UzSite{% endblock %}
+
+{% block content %}
+  <div class="flex items-end justify-between gap-4 mb-6">
+    <div>
+      <h1 class="text-2xl font-semibold">Blog</h1>
+      <p class="text-slate-400 text-sm">Newest posts first. The latest is featured.</p>
+    </div>
+    {% if user.is_staff %}
+      <a href="/admin/blog/blogpost/" class="text-sm px-3 py-2 rounded bg-slate-800 hover:bg-slate-700">Admin</a>
+    {% endif %}
+  </div>
+
+  {% if latest %}
+    <a href="{{ latest.get_absolute_url }}" class="block rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 hover:border-slate-700 transition p-6 mb-8">
+      <div class="text-xs text-slate-400 mb-2">Latest</div>
+      <div class="text-xl font-semibold mb-2">{{ latest.title }}</div>
+      {% if latest.excerpt %}
+        <div class="text-slate-300">{{ latest.excerpt|linebreaksbr }}</div>
+      {% else %}
+        <div class="text-slate-300 line-clamp-3">{{ latest.body|truncatechars:220 }}</div>
+      {% endif %}
+      <div class="text-xs text-slate-500 mt-4">
+        {% if latest.published_at %}{{ latest.published_at|date:'Y-m-d H:i' }}{% endif %}
+      </div>
+    </a>
+  {% else %}
+    <div class="rounded-xl border border-slate-800 bg-slate-900 p-5 mb-8">
+      <div class="font-medium">No published posts yet.</div>
+      <div class="text-sm text-slate-400 mt-1">Create one in the admin and set status=Published with a published_at.</div>
+    </div>
+  {% endif %}
+
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {% for post in posts %}
+      <a href="{{ post.get_absolute_url }}" class="block rounded-xl border border-slate-800 bg-slate-900 hover:bg-slate-900/60 hover:border-slate-700 transition p-5">
+        <div class="font-semibold mb-2">{{ post.title }}</div>
+        {% if post.excerpt %}
+          <div class="text-sm text-slate-300">{{ post.excerpt|linebreaksbr }}</div>
+        {% else %}
+          <div class="text-sm text-slate-300">{{ post.body|truncatechars:160 }}</div>
+        {% endif %}
+        <div class="text-xs text-slate-500 mt-4">
+          {% if post.published_at %}{{ post.published_at|date:'Y-m-d H:i' }}{% endif %}
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+{% endblock %}

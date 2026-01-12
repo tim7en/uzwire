@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }} · UzSite{% endblock %}
+
+{% block content %}
+  <div class="mb-6">
+    <a href="/" class="text-sm text-slate-400 hover:text-slate-200">← Back</a>
+  </div>
+
+  <article class="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+    <h1 class="text-3xl font-semibold tracking-tight">{{ post.title }}</h1>
+    <div class="text-xs text-slate-500 mt-2">
+      {% if post.published_at %}Published {{ post.published_at|date:'Y-m-d H:i' }}{% endif %}
+    </div>
+
+    {% if post.excerpt %}
+      <div class="mt-6 text-slate-200 text-lg">{{ post.excerpt|linebreaksbr }}</div>
+    {% endif %}
+
+    <div class="mt-6 prose prose-invert max-w-none">
+      {{ post.body|linebreaksbr }}
+    </div>
+  </article>
+{% endblock %}
