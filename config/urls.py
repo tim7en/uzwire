@@ -55,6 +55,7 @@ urlpatterns = [
 
 
 urlpatterns += i18n_patterns(
+    path("", include("dashboard.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/", include("accounts.urls")),
     path("", include("billing.urls")),

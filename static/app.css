@@ -105,6 +105,25 @@ html.theme-light .logo-dark { display: none; }
 .uz-link { color: var(--accent); }
 .uz-link:hover { color: var(--accent-2); }
 
+/* Simple, professional motion */
+.uz-fadein {
+  animation: uz-fadein 420ms ease-out both;
+}
+
+.uz-hoverlift {
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.uz-hoverlift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(2, 6, 23, 0.35);
+}
+
+@keyframes uz-fadein {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* Header nav */
 .uz-navlink {
   color: var(--muted);

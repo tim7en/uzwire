@@ -48,11 +48,17 @@
         </a>
 
         <nav class="hidden md:flex items-center gap-4 text-sm">
-          <a class="uz-navlink" href="{% url 'blog:home' %}#about">{% trans "About" %}</a>
-          <a class="uz-navlink" href="{% url 'blog:home' %}#charts">{% trans "Markets" %}</a>
-          <a class="uz-navlink" href="{% url 'blog:home' %}#workflow">{% trans "How it works" %}</a>
-          <a class="uz-navlink" href="{% url 'blog:home' %}#pricing">{% trans "Pricing" %}</a>
-          <a class="uz-navlink" href="{% url 'blog:home' %}#blog">{% trans "Updates" %}</a>
+          {% if user.is_authenticated %}
+            <a class="uz-navlink" href="{% url 'dashboard:home' %}">{% trans "Dashboard" %}</a>
+            <a class="uz-navlink" href="{% url 'dashboard:home' %}#overview">{% trans "Markets" %}</a>
+            <a class="uz-navlink" href="{% url 'dashboard:home' %}#portfolio">{% trans "Portfolio" %}</a>
+          {% else %}
+            <a class="uz-navlink" href="{% url 'blog:home' %}#about">{% trans "About" %}</a>
+            <a class="uz-navlink" href="{% url 'blog:home' %}#charts">{% trans "Markets" %}</a>
+            <a class="uz-navlink" href="{% url 'blog:home' %}#workflow">{% trans "How it works" %}</a>
+            <a class="uz-navlink" href="{% url 'blog:home' %}#pricing">{% trans "Pricing" %}</a>
+            <a class="uz-navlink" href="{% url 'blog:home' %}#blog">{% trans "Updates" %}</a>
+          {% endif %}
         </nav>
 
         <nav class="flex items-center gap-3 text-sm">

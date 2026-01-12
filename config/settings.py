@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'news',
     'markets',
     'billing',
+    'dashboard',
 ]
 
 MIDDLEWARE = [

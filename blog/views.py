@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404, render
+from django.shortcuts import redirect
 from django.utils import timezone
 
 from .models import BlogPost
@@ -11,6 +12,8 @@ from markets.services import get_market_snapshot
 
 
 def home(request):
+	if request.user.is_authenticated:
+		return redirect("dashboard:home")
 	qs = BlogPost.objects.published()
 	latest = qs.first()
 	posts = qs[1:] if latest else qs
