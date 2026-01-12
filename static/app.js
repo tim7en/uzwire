@@ -78,18 +78,43 @@
     return `${sign}${formatNumber(v, 2)}%`;
   }
 
-  function buildTickerText(items) {
-    return (items || [])
+  function escapeHtml(s) {
+    return String(s || '')
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#39;');
+  }
+
+  function getBadgeText(symbol, name) {
+    const sym = String(symbol || '').toUpperCase();
+    if (sym === 'BTC') return '₿';
+    if (sym === 'ETH') return 'Ξ';
+    if (sym === 'XAU') return 'Au';
+    if (sym === 'XAG') return 'Ag';
+    if (sym === 'SPX') return 'S&P';
+    if (sym === 'NDX') return 'NDX';
+    if (sym === 'USDUZS') return 'USD';
+    if (sym === 'EURUZS') return 'EUR';
+    if (sym === 'RUBUZS') return 'RUB';
+    return (name || sym || 'MKT').slice(0, 3).toUpperCase();
+  }
+
+  function buildTickerRowHtml(items) {
+    const parts = (items || [])
       .filter(Boolean)
       .map((it) => {
         const name = it.name || it.symbol || '';
+        const badge = getBadgeText(it.symbol, name);
         const price = formatPrice(it);
         const chg = formatChange(it);
-        const chgPart = chg ? ` (${chg})` : '';
-        return `${name}: ${price}${chgPart}`;
+        const chgPart = chg ? ` <span class="uz-ticker-chg">(${escapeHtml(chg)})</span>` : '';
+        return `<span class="uz-ticker-item"><span class="uz-ticker-badge">${escapeHtml(badge)}</span><span class="uz-ticker-name">${escapeHtml(name)}:</span> <span class="uz-ticker-price">${escapeHtml(price)}</span>${chgPart}</span>`;
       })
-      .filter(Boolean)
-      .join('   •   ');
+      .filter(Boolean);
+
+    return parts.join('<span class="uz-ticker-sep">•</span>');
   }
 
   async function refreshTicker() {
@@ -103,18 +128,18 @@
       const resp = await fetch('/api/markets/ticker/', { headers: { 'Accept': 'application/json' } });
       if (!resp.ok) throw new Error('bad status');
       const data = await resp.json();
-      const text = buildTickerText(data.items);
-      if (!text) {
+      const row = buildTickerRowHtml(data.items);
+      if (!row) {
         el.style.display = 'none';
         return;
       }
 
-      // Duplicate content for smoother marquee.
-      track.textContent = `${text}   •   ${text}`;
+      // Two identical sequences => seamless marquee with no visible “gap”.
+      track.innerHTML = `<div class="uz-ticker-seq">${row}</div><div class="uz-ticker-seq" aria-hidden="true">${row}</div>`;
       el.style.display = '';
 
-      // Auto-tune duration by text length.
-      const seconds = Math.max(25, Math.min(70, Math.round(text.length / 6)));
+      // Slower speed.
+      const seconds = 90;
       el.style.setProperty('--uz-ticker-duration', `${seconds}s`);
     } catch (e) {
       // Keep a non-blocking fallback.

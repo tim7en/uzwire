@@ -19,6 +19,7 @@
     <meta property="og:title" content="{% trans "UzWire — Personal Finance & Portfolio Tracking" %}" />
     <meta property="og:description" content="{% trans "Track finances and portfolios, compare to markets, and follow trusted Uzbekistan news sources." %}" />
     <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script>
@@ -40,31 +41,33 @@
 
     <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur">
       <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-6">
-        <a href="/" class="flex items-center gap-3">
-          <img class="h-24 md:h-30 w-auto logo-dark" src="{% static 'img/logo-dark.svg' %}" alt="UzWire" />
-          <img class="h-24 md:h-30 w-auto logo-light" src="{% static 'img/logo-light.svg' %}" alt="UzWire" />
+        <a href="{% url 'blog:home' %}" class="flex items-center gap-3">
+          <img class="h-12 md:h-14 w-auto logo-dark" src="{% static 'img/logo-dark.svg' %}" alt="UzWire" />
+          <img class="h-12 md:h-14 w-auto logo-light" src="{% static 'img/logo-light.svg' %}" alt="UzWire" />
 
         </a>
 
         <nav class="hidden md:flex items-center gap-4 text-sm">
-          <a class="uz-navlink" href="#about">{% trans "About" %}</a>
-          <a class="uz-navlink" href="#markets">{% trans "Markets" %}</a>
-          <a class="uz-navlink" href="#workflow">{% trans "How it works" %}</a>
-          <a class="uz-navlink" href="#pricing">{% trans "Pricing" %}</a>
-          <a class="uz-navlink" href="#blog">{% trans "Updates" %}</a>
+          <a class="uz-navlink" href="{% url 'blog:home' %}#about">{% trans "About" %}</a>
+          <a class="uz-navlink" href="{% url 'blog:home' %}#charts">{% trans "Markets" %}</a>
+          <a class="uz-navlink" href="{% url 'blog:home' %}#workflow">{% trans "How it works" %}</a>
+          <a class="uz-navlink" href="{% url 'blog:home' %}#pricing">{% trans "Pricing" %}</a>
+          <a class="uz-navlink" href="{% url 'blog:home' %}#blog">{% trans "Updates" %}</a>
         </nav>
 
         <nav class="flex items-center gap-3 text-sm">
-          <form method="post" action="{% url 'set_language' %}" class="hidden sm:block">
-            {% csrf_token %}
-            <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-            <select name="language" onchange="this.form.submit()" class="px-2 py-1 rounded bg-slate-950 border border-slate-800 text-slate-200">
+          <div class="hidden sm:block">
+            <select
+              aria-label="{% trans 'Language' %}"
+              onchange="if (this.value) window.location.href = this.value"
+              class="px-2 py-1 rounded bg-slate-950 border border-slate-800 text-slate-200"
+            >
               {% get_available_languages as LANGS %}
               {% for code, name in LANGS %}
-                <option value="{{ code }}" {% if code == CURRENT_LANG %}selected{% endif %}>{{ name }}</option>
+                <option value="{% lang_url request code %}" {% if code == CURRENT_LANG %}selected{% endif %}>{{ name }}</option>
               {% endfor %}
             </select>
-          </form>
+          </div>
 
           <button type="button" onclick="window.uzwireToggleTheme && window.uzwireToggleTheme()" class="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700">
             {% trans "Theme" %}
@@ -90,14 +93,6 @@
       </div>
     </header>
 
-    <div class="border-b border-slate-800 bg-slate-950/30">
-      <div class="max-w-6xl mx-auto px-4 py-2">
-        <div id="uzTicker" class="uz-ticker text-xs text-slate-400" data-loading="{% trans "Loading…" %}">
-          <div id="uzTickerTrack" class="uz-ticker-track">{% trans "Loading…" %}</div>
-        </div>
-      </div>
-    </div>
-
     <main class="max-w-6xl mx-auto px-4 py-8">
       {% if messages %}
         <div class="space-y-2 mb-6">
@@ -112,7 +107,16 @@
 
     <footer class="border-t border-slate-800">
       <div class="max-w-6xl mx-auto px-4 py-6 text-xs text-slate-500">
-        {% trans "UzWire is a personal finance and portfolio tracking platform for Uzbekistan. Market data is best-effort and for informational purposes only." %}
+        <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+          <div>
+            {% trans "UzWire is a personal finance and portfolio tracking platform for Uzbekistan and Central Asia. Market data is best‑effort and for informational purposes only." %}
+          </div>
+          {% if site_users_count is not None %}
+            <div class="text-slate-500">
+              {% trans "Users" %}: {{ site_users_count }} · {% trans "Members" %}: {{ site_members_count }} · {% trans "Visitors" %}: {{ site_visitors_count }}
+            </div>
+          {% endif %}
+        </div>
       </div>
     </footer>
 

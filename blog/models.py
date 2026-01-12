@@ -35,3 +35,16 @@ class BlogPost(models.Model):
 
 	def get_absolute_url(self):
 		return reverse("blog:detail", kwargs={"slug": self.slug})
+
+
+class SiteStat(models.Model):
+	key = models.CharField(max_length=64, unique=True)
+	value = models.BigIntegerField(default=0)
+	updated_at = models.DateTimeField(auto_now=True)
+
+	class Meta:
+		verbose_name = "Site stat"
+		verbose_name_plural = "Site stats"
+
+	def __str__(self) -> str:
+		return f"{self.key}={self.value}"
