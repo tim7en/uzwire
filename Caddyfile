@@ -1,0 +1,27 @@
+{
+    # Email for Let's Encrypt (optional but recommended)
+    # email you@example.com
+}
+
+(uzwire_common) {
+    encode zstd gzip
+
+    # Security headers (basic)
+    header {
+        X-Content-Type-Options nosniff
+        X-Frame-Options DENY
+        Referrer-Policy same-origin
+    }
+}
+
+uzwire.uz {
+    import uzwire_common
+
+    reverse_proxy web:8000
+}
+
+www.uzwire.uz {
+    import uzwire_common
+
+    redir https://uzwire.uz{uri} permanent
+}
