@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 
     'accounts',
     'blog',
+    'news',
 ]
 
 MIDDLEWARE = [
@@ -141,6 +142,30 @@ STORAGES = {
 
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "uzsite",
+    }
+}
+
+NEWS_FEEDS = [
+    {
+        "name": "NYT Business",
+        "url": "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml",
+    },
+    {
+        "name": "WSJ Markets",
+        "url": "https://feeds.a.dj.com/rss/RSSMarketsMain.xml",
+    },
+    # Reuters does not provide a stable, free official RSS/API for all use-cases.
+    # Keep sources here limited to publicly accessible feeds.
+    {
+        "name": "CoinDesk",
+        "url": "https://feeds.feedburner.com/CoinDesk",
+    },
+]
 
 # Security (set stricter values in production via env)
 CSRF_TRUSTED_ORIGINS = env.list("DJANGO_CSRF_TRUSTED_ORIGINS", default=[])
