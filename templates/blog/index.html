@@ -1,74 +1,494 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Home · UzSite{% endblock %}
+{% block title %}{% trans "UzWire — Personal Finance & Portfolio Tracking" %}{% endblock %}
 
 {% block content %}
-  <div class="flex items-end justify-between gap-4 mb-6">
-    <div>
-      <h1 class="text-2xl font-semibold">Blog</h1>
-      <p class="text-slate-400 text-sm">Newest posts first. The latest is featured.</p>
+  <section class="mb-10">
+    <div class="rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-950 to-black p-8 md:p-10">
+      <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 text-xs text-slate-300 border border-slate-800 rounded-full px-3 py-1 mb-4">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          {% trans "Personal finance for Uzbekistan" %}
+        </div>
+        <h1 class="text-3xl md:text-5xl font-semibold tracking-tight">{% trans "Track money, portfolios, and grow with data." %}</h1>
+        <p class="mt-4 text-slate-300 text-base md:text-lg">
+          {% trans "Budgeting, savings, and portfolio tracking in one place. Upload CSV or connect accounts (coming soon), compare performance vs markets, and follow Uzbekistan-focused economic news." %}
+          {% trans "Green means positive returns — we highlight growth and risk clearly." %}
+        </p>
+
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="#workflow" class="px-4 py-2 rounded bg-emerald-600 hover:bg-emerald-500">{% trans "How it works" %}</a>
+          <a href="#pricing" class="px-4 py-2 rounded bg-slate-800 hover:bg-slate-700">{% trans "Pricing" %}</a>
+          <a href="#markets" class="px-4 py-2 rounded bg-slate-950 border border-slate-800 hover:border-slate-700">{% trans "Live markets" %}</a>
+        </div>
+
+        <div class="mt-6 text-xs text-slate-400">
+          {% trans "Not investment advice. Data is informational and best‑effort." %}
+        </div>
+      </div>
     </div>
-    {% if user.is_staff %}
-      <a href="/admin/blog/blogpost/" class="text-sm px-3 py-2 rounded bg-slate-800 hover:bg-slate-700">Admin</a>
-    {% endif %}
-  </div>
+  </section>
+
+  <section id="about" class="mb-12 scroll-mt-24">
+    <div class="grid gap-6 md:grid-cols-3">
+      <div class="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+        <div class="text-sm text-slate-400">Core</div>
+        <div class="text-lg font-semibold mt-1">{% trans "Personal finance + portfolio tracking" %}</div>
+        <div class="text-sm text-slate-300 mt-2">{% trans "Track budgeting, savings, and investments. Upload CSV and monitor P&L, allocation, and risk over time." %}</div>
+      </div>
+      <div class="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+        <div class="text-sm text-slate-400">Benchmarking</div>
+        <div class="text-lg font-semibold mt-1">{% trans "Compare across markets" %}</div>
+        <div class="text-sm text-slate-300 mt-2">{% trans "Benchmark your results vs indices, commodities, and crypto for the same dates." %}</div>
+      </div>
+      <div class="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+        <div class="text-sm text-slate-400">Strategy</div>
+        <div class="text-lg font-semibold mt-1">{% trans "Guidance & alerts" %}</div>
+        <div class="text-sm text-slate-300 mt-2">{% trans "Daily notes and alerts for portfolio management. Higher-frequency insights are paid." %}</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="markets" class="mb-12 scroll-mt-24">
+    <div class="flex items-end justify-between gap-4 mb-4">
+      <div>
+        <h2 class="text-2xl font-semibold">Markets snapshot</h2>
+        <p class="text-slate-400 text-sm">{% trans "Crypto, indices, and commodities (best-effort, cached)." %}</p>
+      </div>
+      <a class="text-sm px-3 py-2 rounded bg-slate-800 hover:bg-slate-700" href="{% url 'news:feed' %}">{% trans "News" %}</a>
+    </div>
+
+    <div class="grid gap-6 lg:grid-cols-2">
+      <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5 overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="text-slate-400">
+            <tr>
+              <th class="text-left font-medium py-2">Category</th>
+              <th class="text-left font-medium py-2">Instrument</th>
+              <th class="text-left font-medium py-2">Symbol</th>
+              <th class="text-right font-medium py-2">Price</th>
+              <th class="text-right font-medium py-2">Day %</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800">
+            {% for r in market_rows %}
+              <tr>
+                <td class="py-3 text-slate-300">{{ r.category }}</td>
+                <td class="py-3 font-medium">{{ r.name }}</td>
+                <td class="py-3 text-slate-300">{{ r.symbol }}</td>
+                <td class="py-3 text-right">
+                  {% if r.price is not None %}{{ r.price|floatformat:2 }}{% else %}<span class="text-slate-500">—</span>{% endif %}
+                </td>
+                <td class="py-3 text-right">
+                  {% if r.change_pct is not None %}
+                    <span class="{% if r.change_pct >= 0 %}text-emerald-300{% else %}text-rose-300{% endif %}">
+                      {{ r.change_pct|floatformat:2 }}%
+                    </span>
+                  {% else %}
+                    <span class="text-slate-500">—</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="text-xs text-slate-500 mt-3">{% trans "Charts below are 30D price series (UTC)." %}</div>
+      </div>
+
+      <div class="grid gap-6">
+        <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+          <div class="flex items-center justify-between">
+            <div class="font-semibold">BTC (30D)</div>
+            <div class="text-xs text-slate-500" id="btcStatus">Loading…</div>
+          </div>
+          <div class="mt-4 h-44">
+            <canvas id="btcChart"></canvas>
+          </div>
+        </div>
+        <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+          <div class="flex items-center justify-between">
+            <div class="font-semibold">ETH (30D)</div>
+            <div class="text-xs text-slate-500" id="ethStatus">Loading…</div>
+          </div>
+          <div class="mt-4 h-44">
+            <canvas id="ethChart"></canvas>
+          </div>
+        </div>
+
+        <div class="grid gap-6 md:grid-cols-2">
+          <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+            <div class="flex items-center justify-between">
+              <div class="font-semibold">S&P 500 (30D)</div>
+              <div class="text-xs text-slate-500" id="spxStatus">Loading…</div>
+            </div>
+            <div class="mt-4 h-40"><canvas id="spxChart"></canvas></div>
+          </div>
+          <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+            <div class="flex items-center justify-between">
+              <div class="font-semibold">Nasdaq 100 (30D)</div>
+              <div class="text-xs text-slate-500" id="ndxStatus">Loading…</div>
+            </div>
+            <div class="mt-4 h-40"><canvas id="ndxChart"></canvas></div>
+          </div>
+          <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+            <div class="flex items-center justify-between">
+              <div class="font-semibold">Gold (30D)</div>
+              <div class="text-xs text-slate-500" id="xauStatus">Loading…</div>
+            </div>
+            <div class="mt-4 h-40"><canvas id="xauChart"></canvas></div>
+          </div>
+          <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+            <div class="flex items-center justify-between">
+              <div class="font-semibold">Silver (30D)</div>
+              <div class="text-xs text-slate-500" id="xagStatus">Loading…</div>
+            </div>
+            <div class="mt-4 h-40"><canvas id="xagChart"></canvas></div>
+          </div>
+          <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+            <div class="flex items-center justify-between">
+              <div class="font-semibold">VIX (30D)</div>
+              <div class="text-xs text-slate-500" id="vixStatus">Loading…</div>
+            </div>
+            <div class="mt-4 h-40"><canvas id="vixChart"></canvas></div>
+          </div>
+          <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+            <div class="flex items-center justify-between">
+              <div class="font-semibold">Fear & Greed (Crypto)</div>
+              <div class="text-xs text-slate-500" id="fngStatus">Loading…</div>
+            </div>
+            <div class="mt-4 h-40"><canvas id="fngChart"></canvas></div>
+          </div>
+
+          <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+            <div class="flex items-center justify-between">
+              <div class="font-semibold">Fear & Greed (US, CNN)</div>
+              <div class="text-xs text-slate-500" id="cnnFngStatus">Loading…</div>
+            </div>
+            <div class="mt-4 h-40"><canvas id="cnnFngChart"></canvas></div>
+          </div>
+
+          <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+            <div class="flex items-center justify-between">
+              <div class="font-semibold">Fear & Greed (Coinglass)</div>
+              <div class="text-xs text-slate-500" id="cgFngStatus">Loading…</div>
+            </div>
+            <div class="mt-4 h-40"><canvas id="cgFngChart"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="workflow" class="mb-12 scroll-mt-24">
+    <div class="flex items-end justify-between gap-4 mb-4">
+      <div>
+        <h2 class="text-2xl font-semibold">Workflow</h2>
+        <p class="text-slate-400 text-sm">{% trans "A simple process: track → benchmark → improve." %}</p>
+      </div>
+    </div>
+
+    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+      <div class="flex flex-wrap gap-2 mb-5">
+        <button data-tab="connect" class="tabBtn px-3 py-2 rounded bg-slate-800 hover:bg-slate-700 text-sm">{% trans "Connect accounts" %}</button>
+        <button data-tab="csv" class="tabBtn px-3 py-2 rounded bg-slate-800 hover:bg-slate-700 text-sm">{% trans "Upload CSV" %}</button>
+        <button data-tab="ai" class="tabBtn px-3 py-2 rounded bg-slate-800 hover:bg-slate-700 text-sm">{% trans "Strategy updates" %}</button>
+      </div>
+
+      <div id="tab-connect" class="tabPanel">
+        <div class="grid gap-6 md:grid-cols-2">
+          <div>
+            <div class="text-lg font-semibold">{% trans "Connect" %}</div>
+            <div class="text-slate-300 text-sm mt-2">{% trans "Link accounts (coming soon) to sync balances and transactions automatically." %}</div>
+            <ul class="mt-3 text-sm text-slate-300 list-disc pl-5 space-y-1">
+              <li>{% trans "Unified view across banks, brokers, and wallets" %}</li>
+              <li>{% trans "Allocation, drawdowns, and performance attribution" %}</li>
+              <li>{% trans "Security-first design (least privilege)" %}</li>
+            </ul>
+          </div>
+          <div class="rounded-xl border border-slate-800 bg-slate-950 p-5">
+            <div class="text-xs text-slate-400">Coming next</div>
+            <div class="mt-2 text-sm text-slate-300">{% trans "Bank/broker connectors and family accounts." %}</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-csv" class="tabPanel hidden">
+        <div class="grid gap-6 md:grid-cols-2">
+          <div>
+            <div class="text-lg font-semibold">{% trans "Upload CSV" %}</div>
+            <div class="text-slate-300 text-sm mt-2">{% trans "Upload a CSV export or fill a template, and get a report vs benchmarks for the same dates." %}</div>
+            <ul class="mt-3 text-sm text-slate-300 list-disc pl-5 space-y-1">
+              <li>{% trans "Performance vs indices/commodities/crypto" %}</li>
+              <li>{% trans "Period analytics (weekly/monthly/custom)" %}</li>
+              <li>{% trans "Detect concentration risk" %}</li>
+            </ul>
+          </div>
+          <div class="rounded-xl border border-slate-800 bg-slate-950 p-5">
+            <div class="text-xs text-slate-400">Template</div>
+            <div class="mt-2 text-sm text-slate-300">{% trans "We’ll add a downloadable CSV template and uploader next." %}</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-ai" class="tabPanel hidden">
+        <div class="grid gap-6 md:grid-cols-2">
+          <div>
+            <div class="text-lg font-semibold">{% trans "Strategy updates" %}</div>
+            <div class="text-slate-300 text-sm mt-2">{% trans "Daily notes are included for paid users. Higher frequency (hourly/minute) is commercial." %}</div>
+            <ul class="mt-3 text-sm text-slate-300 list-disc pl-5 space-y-1">
+              <li>{% trans "Risk-aware targets and rebalancing ideas" %}</li>
+              <li>{% trans "Market regime notes" %}</li>
+              <li>{% trans "Explainable recommendations" %}</li>
+            </ul>
+          </div>
+          <div class="rounded-xl border border-slate-800 bg-slate-950 p-5">
+            <div class="text-xs text-slate-400">Note</div>
+            <div class="mt-2 text-sm text-slate-300">{% trans "Recommendations are informational; you control all decisions." %}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing" class="mb-12 scroll-mt-24">
+    <div class="flex items-end justify-between gap-4 mb-4">
+      <div>
+        <h2 class="text-2xl font-semibold">{% trans "Pricing" %}</h2>
+        <p class="text-slate-400 text-sm">{% trans "Start free. Pay for strategy and high-frequency insights." %}</p>
+      </div>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-3">
+      <div class="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+        <div class="text-sm text-slate-400">{% trans "Free" %}</div>
+        <div class="text-xl font-semibold mt-1">{% trans "Tracking" %}</div>
+        <div class="text-slate-300 text-sm mt-2">{% trans "Basic tracking + benchmarks + local news." %}</div>
+        <div class="mt-4 text-sm text-slate-300">{% trans "Includes:" %}</div>
+        <ul class="mt-2 text-sm text-slate-300 list-disc pl-5 space-y-1">
+          <li>{% trans "Dashboard + benchmarking" %}</li>
+          <li>{% trans "CSV import (upcoming)" %}</li>
+          <li>{% trans "News + watchlists" %}</li>
+        </ul>
+      </div>
+      <div class="rounded-2xl border border-emerald-600/40 bg-slate-900 p-6">
+        <div class="text-sm text-slate-400">{% trans "Pro" %}</div>
+        <div class="text-xl font-semibold mt-1">{% trans "Daily strategy" %}</div>
+        <div class="text-slate-300 text-sm mt-2">{% trans "Daily notes and portfolio insights." %}</div>
+        <div class="mt-4 text-sm text-slate-300">{% trans "Includes:" %}</div>
+        <ul class="mt-2 text-sm text-slate-300 list-disc pl-5 space-y-1">
+          <li>{% trans "Daily strategy updates" %}</li>
+          <li>{% trans "Reports by date range" %}</li>
+          <li>{% trans "Risk and allocation insights" %}</li>
+        </ul>
+      </div>
+      <div class="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+        <div class="text-sm text-slate-400">{% trans "Commercial" %}</div>
+        <div class="text-xl font-semibold mt-1">{% trans "High-frequency" %}</div>
+        <div class="text-slate-300 text-sm mt-2">{% trans "Hourly/minute signals and integrations for teams." %}</div>
+        <div class="mt-4 text-sm text-slate-300">{% trans "Includes:" %}</div>
+        <ul class="mt-2 text-sm text-slate-300 list-disc pl-5 space-y-1">
+          <li>{% trans "High-frequency updates" %}</li>
+          <li>{% trans "Organization accounts" %}</li>
+          <li>{% trans "API + webhooks (future)" %}</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
   {% if news_items %}
-    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-6 mb-8">
-      <div class="flex items-center justify-between gap-4 mb-4">
-        <div>
-          <div class="text-xs text-slate-400">Headlines</div>
-          <div class="text-lg font-semibold">Finance • Economics • Policy • Crypto</div>
+    <section class="mb-12">
+      <div class="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+        <div class="flex items-center justify-between gap-4 mb-4">
+          <div>
+            <div class="text-xs text-slate-400">Headlines</div>
+            <div class="text-lg font-semibold">{% trans "Finance • Economy • Policy • Crypto" %}</div>
+          </div>
+          <a class="text-sm px-3 py-2 rounded bg-slate-800 hover:bg-slate-700" href="{% url 'news:feed' %}">{% trans "All news" %}</a>
         </div>
-        <a class="text-sm px-3 py-2 rounded bg-slate-800 hover:bg-slate-700" href="{% url 'news:feed' %}">All news</a>
-      </div>
 
-      <div class="divide-y divide-slate-800">
-        {% for item in news_items %}
-          <a class="block py-3 hover:bg-slate-950/30 rounded" href="{{ item.link }}" target="_blank" rel="noopener noreferrer">
-            <div class="flex items-start justify-between gap-4">
-              <div class="font-medium">{{ item.title }}</div>
-              <div class="text-xs text-slate-500 whitespace-nowrap">{{ item.source }}</div>
-            </div>
-          </a>
-        {% endfor %}
+        <div class="divide-y divide-slate-800">
+          {% for item in news_items %}
+            <a class="block py-3 hover:bg-slate-950/30 rounded" href="{{ item.link }}" target="_blank" rel="noopener noreferrer">
+              <div class="flex items-start justify-between gap-4">
+                <div class="font-medium">{{ item.title }}</div>
+                <div class="text-xs text-slate-500 whitespace-nowrap">{{ item.source }}</div>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
       </div>
-    </div>
+    </section>
   {% endif %}
 
-  {% if latest %}
-    <a href="{{ latest.get_absolute_url }}" class="block rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 hover:border-slate-700 transition p-6 mb-8">
-      <div class="text-xs text-slate-400 mb-2">Latest</div>
-      <div class="text-xl font-semibold mb-2">{{ latest.title }}</div>
-      {% if latest.excerpt %}
-        <div class="text-slate-300">{{ latest.excerpt|linebreaksbr }}</div>
-      {% else %}
-        <div class="text-slate-300 line-clamp-3">{{ latest.body|truncatechars:220 }}</div>
+  <section id="blog" class="scroll-mt-24">
+    <div class="flex items-end justify-between gap-4 mb-4">
+      <div>
+        <h2 class="text-2xl font-semibold">Updates</h2>
+        <p class="text-slate-400 text-sm">{% trans "Product notes and research posts (newest first)." %}</p>
+      </div>
+      {% if user.is_staff %}
+        <a href="/admin/blog/blogpost/" class="text-sm px-3 py-2 rounded bg-slate-800 hover:bg-slate-700">Admin</a>
       {% endif %}
-      <div class="text-xs text-slate-500 mt-4">
-        {% if latest.published_at %}{{ latest.published_at|date:'Y-m-d H:i' }}{% endif %}
-      </div>
-    </a>
-  {% else %}
-    <div class="rounded-xl border border-slate-800 bg-slate-900 p-5 mb-8">
-      <div class="font-medium">No published posts yet.</div>
-      <div class="text-sm text-slate-400 mt-1">Create one in the admin and set status=Published with a published_at.</div>
     </div>
-  {% endif %}
 
-  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-    {% for post in posts %}
-      <a href="{{ post.get_absolute_url }}" class="block rounded-xl border border-slate-800 bg-slate-900 hover:bg-slate-900/60 hover:border-slate-700 transition p-5">
-        <div class="font-semibold mb-2">{{ post.title }}</div>
-        {% if post.excerpt %}
-          <div class="text-sm text-slate-300">{{ post.excerpt|linebreaksbr }}</div>
+    {% if latest %}
+      <a href="{{ latest.get_absolute_url }}" class="block rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 hover:border-slate-700 transition p-6 mb-6">
+      <div class="text-xs text-slate-400 mb-2">{% trans "Latest post" %}</div>
+        <div class="text-xl font-semibold mb-2">{{ latest.title }}</div>
+        {% if latest.excerpt %}
+          <div class="text-slate-300">{{ latest.excerpt|linebreaksbr }}</div>
         {% else %}
-          <div class="text-sm text-slate-300">{{ post.body|truncatechars:160 }}</div>
+          <div class="text-slate-300 line-clamp-3">{{ latest.body|truncatechars:220 }}</div>
         {% endif %}
         <div class="text-xs text-slate-500 mt-4">
-          {% if post.published_at %}{{ post.published_at|date:'Y-m-d H:i' }}{% endif %}
+          {% if latest.published_at %}{{ latest.published_at|date:'Y-m-d H:i' }}{% endif %}
         </div>
       </a>
-    {% endfor %}
-  </div>
+    {% endif %}
+
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {% for post in posts %}
+        <a href="{{ post.get_absolute_url }}" class="block rounded-xl border border-slate-800 bg-slate-900 hover:bg-slate-900/60 hover:border-slate-700 transition p-5">
+          <div class="font-semibold mb-2">{{ post.title }}</div>
+          {% if post.excerpt %}
+            <div class="text-sm text-slate-300">{{ post.excerpt|linebreaksbr }}</div>
+          {% else %}
+            <div class="text-sm text-slate-300">{{ post.body|truncatechars:160 }}</div>
+          {% endif %}
+          <div class="text-xs text-slate-500 mt-4">
+            {% if post.published_at %}{{ post.published_at|date:'Y-m-d H:i' }}{% endif %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </section>
+
+  {% trans "Updated" as TXT_UPDATED %}
+  {% trans "Unavailable" as TXT_UNAVAILABLE %}
+  <script>
+    // Tabs
+    const btns = document.querySelectorAll('.tabBtn');
+    const panels = document.querySelectorAll('.tabPanel');
+    function showTab(name) {
+      for (const p of panels) p.classList.toggle('hidden', p.id !== `tab-${name}`);
+      for (const b of btns) {
+        const active = b.dataset.tab === name;
+        b.classList.toggle('bg-emerald-600', active);
+        b.classList.toggle('hover:bg-emerald-500', active);
+        b.classList.toggle('bg-slate-800', !active);
+      }
+    }
+    btns.forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+    showTab('connect');
+
+    // Charts
+    const chartInstances = {};
+    const chartRequestTokens = {};
+
+    const TXT_UPDATED = "{{ TXT_UPDATED|escapejs }}";
+    const TXT_UNAVAILABLE = "{{ TXT_UNAVAILABLE|escapejs }}";
+
+    function getThemeChartColors() {
+      const cs = getComputedStyle(document.documentElement);
+      const accent = (cs.getPropertyValue('--accent') || '#22c55e').trim();
+      const muted = (cs.getPropertyValue('--muted') || '#94a3b8').trim();
+      const grid = document.documentElement.classList.contains('theme-light')
+        ? 'rgba(15, 23, 42, 0.08)'
+        : 'rgba(148, 163, 184, 0.10)';
+      return { accent, muted, grid };
+    }
+
+    async function loadChartSeries(instrument, canvasId, statusId, label) {
+      const status = document.getElementById(statusId);
+      try {
+        if (!window.Chart) {
+          if (status) status.textContent = TXT_UNAVAILABLE;
+          return;
+        }
+
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) {
+          if (status) status.textContent = TXT_UNAVAILABLE;
+          return;
+        }
+
+        const token = String(Date.now()) + ':' + Math.random().toString(16).slice(2);
+        chartRequestTokens[canvasId] = token;
+
+        const resp = await fetch(`/api/markets/series/${encodeURIComponent(instrument)}/?days=30`, { headers: { 'Accept': 'application/json' } });
+        const data = await resp.json();
+
+        if (chartRequestTokens[canvasId] !== token) {
+          return;
+        }
+
+        const series = data.series || [];
+        if (!Array.isArray(series) || series.length < 2) {
+          if (status) status.textContent = TXT_UNAVAILABLE;
+          return;
+        }
+
+        const locale = document.documentElement.lang || undefined;
+        const labels = series.map(p => new Date(p.t).toLocaleDateString(locale));
+        const values = series.map(p => p.p);
+        if (status) status.textContent = TXT_UPDATED;
+
+        const { accent, muted, grid } = getThemeChartColors();
+        if (chartInstances[canvasId]) {
+          chartInstances[canvasId].destroy();
+        }
+
+        const chart = new Chart(canvas, {
+          type: 'line',
+          data: {
+            labels,
+            datasets: [{
+              label: label || instrument,
+              data: values,
+              borderColor: accent,
+              backgroundColor: accent,
+              tension: 0.25,
+              pointRadius: 0,
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { ticks: { color: muted, maxTicksLimit: 6 }, grid: { color: grid } },
+              y: { ticks: { color: muted }, grid: { color: grid } },
+            }
+          }
+        });
+
+        chartInstances[canvasId] = chart;
+      } catch (e) {
+        if (status) status.textContent = TXT_UNAVAILABLE;
+      }
+    }
+
+    function loadAllCharts() {
+      loadChartSeries('BTC', 'btcChart', 'btcStatus', 'BTC');
+      loadChartSeries('ETH', 'ethChart', 'ethStatus', 'ETH');
+      loadChartSeries('SPX', 'spxChart', 'spxStatus', 'S&P 500');
+      loadChartSeries('NDX', 'ndxChart', 'ndxStatus', 'Nasdaq 100');
+      loadChartSeries('XAU', 'xauChart', 'xauStatus', 'Gold');
+      loadChartSeries('XAG', 'xagChart', 'xagStatus', 'Silver');
+      loadChartSeries('VIX', 'vixChart', 'vixStatus', 'VIX');
+      loadChartSeries('FNG', 'fngChart', 'fngStatus', 'Fear & Greed');
+      loadChartSeries('CNNFNG', 'cnnFngChart', 'cnnFngStatus', 'Fear & Greed (CNN)');
+      loadChartSeries('COINGLASSFNG', 'cgFngChart', 'cgFngStatus', 'Fear & Greed (Coinglass)');
+    }
+
+    loadAllCharts();
+    window.addEventListener('uzwire:theme', () => {
+      // Re-render charts so tick/grid colors and line colors match the theme.
+      loadAllCharts();
+    });
+
+    // Refresh every 5 minutes (data is cached server-side)
+    window.setInterval(loadAllCharts, 5 * 60 * 1000);
+  </script>
 {% endblock %}

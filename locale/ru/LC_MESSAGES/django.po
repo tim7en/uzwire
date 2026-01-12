@@ -1,0 +1,291 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: uzwire\n"
+"POT-Creation-Date: 2026-01-12 00:00+0000\n"
+"PO-Revision-Date: 2026-01-12 00:00+0000\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "UzWire — Personal Finance & Portfolio Tracking"
+msgstr "UzWire — Личные финансы и учет портфеля"
+
+msgid "UzWire helps people in Uzbekistan track personal finances and portfolios: budgeting, savings, and performance vs markets — with local news and strategy notes."
+msgstr "UzWire помогает в Узбекистане вести личные финансы и портфель: бюджет, сбережения и сравнение с рынками — плюс местные новости и заметки по стратегии."
+
+msgid "Track finances and portfolios, compare to markets, and follow trusted Uzbekistan news sources."
+msgstr "Отслеживайте финансы и портфели, сравнивайте с рынками и следите за надежными источниками новостей Узбекистана."
+
+msgid "About"
+msgstr "О проекте"
+
+msgid "Markets"
+msgstr "Рынки"
+
+msgid "How it works"
+msgstr "Как это работает"
+
+msgid "Live markets"
+msgstr "Рынки онлайн"
+
+msgid "Pricing"
+msgstr "Цены"
+
+msgid "Updates"
+msgstr "Обновления"
+
+msgid "Theme"
+msgstr "Тема"
+
+msgid "Account"
+msgstr "Аккаунт"
+
+msgid "Logout"
+msgstr "Выйти"
+
+msgid "Login"
+msgstr "Войти"
+
+msgid "Register"
+msgstr "Регистрация"
+
+msgid "UzWire is a personal finance and portfolio tracking platform for Uzbekistan. Market data is best-effort and for informational purposes only."
+msgstr "UzWire — платформа личных финансов и учета портфеля для Узбекистана. Рыночные данные предоставляются по возможности и только для информации."
+
+msgid "Personal finance for Uzbekistan"
+msgstr "Личные финансы для Узбекистана"
+
+msgid "Track money, portfolios, and grow with data."
+msgstr "Отслеживайте деньги, портфели и растите на данных."
+
+msgid "Budgeting, savings, and portfolio tracking in one place. Upload CSV or connect accounts (coming soon), compare performance vs markets, and follow Uzbekistan-focused economic news."
+msgstr "Бюджет, сбережения и учет портфеля — в одном месте. Загружайте CSV или подключайте счета (скоро), сравнивайте результаты с рынками и следите за экономическими новостями Узбекистана."
+
+msgid "Green means positive returns — we highlight growth and risk clearly."
+msgstr "Зеленый — это положительная доходность: мы наглядно показываем рост и риски."
+
+msgid "Not investment advice. Data is informational and best‑effort."
+msgstr "Не является инвестиционной рекомендацией. Данные предоставляются для информации и по возможности."
+
+msgid "Personal finance + portfolio tracking"
+msgstr "Личные финансы + учет портфеля"
+
+msgid "Track budgeting, savings, and investments. Upload CSV and monitor P&L, allocation, and risk over time."
+msgstr "Ведите бюджет, сбережения и инвестиции. Загружайте CSV и отслеживайте прибыль/убыток, распределение и риск во времени."
+
+msgid "Compare across markets"
+msgstr "Сравнивайте с рынками"
+
+msgid "Benchmark your results vs indices, commodities, and crypto for the same dates."
+msgstr "Сравнивайте результаты с индексами, сырьем и крипто на тех же датах."
+
+msgid "Guidance & alerts"
+msgstr "Подсказки и уведомления"
+
+msgid "Daily notes and alerts for portfolio management. Higher-frequency insights are paid."
+msgstr "Ежедневные заметки и уведомления для управления портфелем. Более частые обновления — платные."
+
+msgid "Crypto, indices, and commodities (best-effort, cached)."
+msgstr "Крипто, индексы и сырье (по возможности, с кэшем)."
+
+msgid "News"
+msgstr "Новости"
+
+msgid "Charts below are 30D price series (UTC)."
+msgstr "Графики ниже — динамика цен за 30 дней (UTC)."
+
+msgid "A simple process: track → benchmark → improve."
+msgstr "Простой процесс: учет → сравнение → улучшение."
+
+msgid "Connect accounts"
+msgstr "Подключить счета"
+
+msgid "Upload CSV"
+msgstr "Загрузить CSV"
+
+msgid "Strategy updates"
+msgstr "Обновления стратегии"
+
+msgid "Connect"
+msgstr "Подключение"
+
+msgid "Link accounts (coming soon) to sync balances and transactions automatically."
+msgstr "Подключайте счета (скоро), чтобы автоматически синхронизировать балансы и операции."
+
+msgid "Unified view across banks, brokers, and wallets"
+msgstr "Единый обзор банков, брокеров и кошельков"
+
+msgid "Allocation, drawdowns, and performance attribution"
+msgstr "Распределение, просадки и разбор результата"
+
+msgid "Security-first design (least privilege)"
+msgstr "Безопасность прежде всего (минимальные права)"
+
+msgid "Bank/broker connectors and family accounts."
+msgstr "Интеграции с банками/брокерами и семейные аккаунты."
+
+msgid "Upload a CSV export or fill a template, and get a report vs benchmarks for the same dates."
+msgstr "Загрузите CSV-экспорт или заполните шаблон и получите отчет со сравнением по тем же датам."
+
+msgid "Performance vs indices/commodities/crypto"
+msgstr "Результат vs индексы/сырье/крипто"
+
+msgid "Period analytics (weekly/monthly/custom)"
+msgstr "Аналитика по периодам (неделя/месяц/свой)"
+
+msgid "Detect concentration risk"
+msgstr "Выявление концентрационного риска"
+
+msgid "We’ll add a downloadable CSV template and uploader next."
+msgstr "Скоро добавим шаблон CSV и загрузчик."
+
+msgid "Daily notes are included for paid users. Higher frequency (hourly/minute) is commercial."
+msgstr "Ежедневные заметки доступны платным пользователям. Более частые (почасовые/поминутные) — для бизнеса."
+
+msgid "Risk-aware targets and rebalancing ideas"
+msgstr "Идеи ребалансировки и цели с учетом риска"
+
+msgid "Market regime notes"
+msgstr "Заметки о режиме рынка"
+
+msgid "Explainable recommendations"
+msgstr "Понятные объяснения рекомендаций"
+
+msgid "Recommendations are informational; you control all decisions."
+msgstr "Рекомендации носят информационный характер; решения принимаете вы."
+
+msgid "Start free. Pay for strategy and high-frequency insights."
+msgstr "Начните бесплатно. Платите за стратегию и высокочастотные обновления."
+
+msgid "Free"
+msgstr "Бесплатно"
+
+msgid "Tracking"
+msgstr "Учет"
+
+msgid "Basic tracking + benchmarks + local news."
+msgstr "Базовый учет + сравнения + местные новости."
+
+msgid "Includes:"
+msgstr "Включает:"
+
+msgid "Dashboard + benchmarking"
+msgstr "Дашборд + сравнение"
+
+msgid "CSV import (upcoming)"
+msgstr "Импорт CSV (скоро)"
+
+msgid "News + watchlists"
+msgstr "Новости + списки наблюдения"
+
+msgid "Pro"
+msgstr "Pro"
+
+msgid "Daily strategy"
+msgstr "Ежедневная стратегия"
+
+msgid "Daily notes and portfolio insights."
+msgstr "Ежедневные заметки и инсайты по портфелю."
+
+msgid "Daily strategy updates"
+msgstr "Ежедневные обновления стратегии"
+
+msgid "Reports by date range"
+msgstr "Отчеты по диапазону дат"
+
+msgid "Risk and allocation insights"
+msgstr "Инсайты по риску и распределению"
+
+msgid "Commercial"
+msgstr "Коммерческий"
+
+msgid "High-frequency"
+msgstr "Высокая частота"
+
+msgid "Hourly/minute signals and integrations for teams."
+msgstr "Почасовые/поминутные сигналы и интеграции для команд."
+
+msgid "High-frequency updates"
+msgstr "Высокочастотные обновления"
+
+msgid "Organization accounts"
+msgstr "Организационные аккаунты"
+
+msgid "API + webhooks (future)"
+msgstr "API + вебхуки (в будущем)"
+
+msgid "Finance • Economy • Policy • Crypto"
+msgstr "Финансы • Экономика • Политика • Крипто"
+
+msgid "All news"
+msgstr "Все новости"
+
+msgid "Product notes and research posts (newest first)."
+msgstr "Заметки о продукте и исследования (сначала новые)."
+
+msgid "Latest post"
+msgstr "Последний пост"
+
+msgid "Back"
+msgstr "Назад"
+
+msgid "Published"
+msgstr "Опубликовано"
+
+msgid "Sign in"
+msgstr "Войти"
+
+msgid "No account?"
+msgstr "Нет аккаунта?"
+
+msgid "Create account"
+msgstr "Создать аккаунт"
+
+msgid "Username"
+msgstr "Имя пользователя"
+
+msgid "Password"
+msgstr "Пароль"
+
+msgid "Confirm password"
+msgstr "Подтвердите пароль"
+
+msgid "Already have an account?"
+msgstr "Уже есть аккаунт?"
+
+msgid "Headlines from public RSS feeds. Clicking opens the original source."
+msgstr "Заголовки из публичных RSS. При клике открывается первоисточник."
+
+msgid "No news items."
+msgstr "Нет новостей."
+
+msgid "Check server outbound internet access, or update NEWS_FEEDS."
+msgstr "Проверьте доступ сервера в интернет или обновите NEWS_FEEDS."
+
+msgid "Plan"
+msgstr "Тариф"
+
+msgid "Paid until"
+msgstr "Оплачено до"
+
+msgid "Balance"
+msgstr "Баланс"
+
+msgid "cents"
+msgstr "коп."
+
+msgid "Payments are managed via admin for now. Payment provider integration comes next."
+msgstr "Платежи пока управляются через админку. Интеграция с провайдером оплаты будет следующей."
+
+msgid "This feature requires a paid plan."
+msgstr "Эта функция доступна только на платном тарифе."
+
+msgid "Loading…"
+msgstr "Загрузка…"
+
+msgid "Updated"
+msgstr "Обновлено"
+
+msgid "Unavailable"
+msgstr "Недоступно"

@@ -9,6 +9,7 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends \
      ca-certificates \
      curl \
+    gettext \
      libpq5 \
   && rm -rf /var/lib/apt/lists/*
 
@@ -16,6 +17,11 @@ COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
 COPY . /app/
+
+# Build-time defaults (runtime env_file overrides these)
+ENV DJANGO_SECRET_KEY=build-only
+
+RUN python /app/manage.py compilemessages
 
 RUN chmod +x /app/entrypoint.sh
 

@@ -1,29 +1,102 @@
 <!doctype html>
-<html lang="en">
+{% load static i18n %}
+{% load seo %}
+{% get_current_language as CURRENT_LANG %}
+<html lang="{{ CURRENT_LANG }}">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{% block title %}UzSite{% endblock %}</title>
+    <title>{% block title %}{% trans "UzWire — Personal Finance & Portfolio Tracking" %}{% endblock %}</title>
+    <meta name="description" content="{% trans "UzWire helps people in Uzbekistan track personal finances and portfolios: budgeting, savings, and performance vs markets — with local news and strategy notes." %}" />
+    <meta name="robots" content="index,follow" />
+
+    <link rel="canonical" href="{{ request.build_absolute_uri }}" />
+    <link rel="alternate" hreflang="x-default" href="{% lang_url request 'en' %}" />
+    <link rel="alternate" hreflang="en" href="{% lang_url request 'en' %}" />
+    <link rel="alternate" hreflang="ru" href="{% lang_url request 'ru' %}" />
+    <link rel="alternate" hreflang="uz" href="{% lang_url request 'uz' %}" />
+
+    <meta property="og:title" content="{% trans "UzWire — Personal Finance & Portfolio Tracking" %}" />
+    <meta property="og:description" content="{% trans "Track finances and portfolios, compare to markets, and follow trusted Uzbekistan news sources." %}" />
+    <meta property="og:type" content="website" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script>
+      (function(){
+        try {
+          var t = localStorage.getItem('uzwire_theme');
+          if (t !== 'light' && t !== 'dark') {
+            t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+          }
+          document.documentElement.classList.add(t === 'light' ? 'theme-light' : 'theme-dark');
+          document.documentElement.dataset.theme = t;
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="{% static 'app.css' %}" />
   </head>
-  <body class="bg-slate-950 text-slate-100 min-h-screen">
+  <body class="min-h-screen">
+    <div class="uz-orbit" aria-hidden="true"></div>
+
     <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur">
-      <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-        <a href="/" class="text-lg font-semibold tracking-tight">UzSite</a>
+      <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-6">
+        <a href="/" class="flex items-center gap-3">
+          <img class="h-10 md:h-12 w-auto logo-dark" src="{% static 'img/logo-dark.svg' %}" alt="UzWire" />
+          <img class="h-10 md:h-12 w-auto logo-light" src="{% static 'img/logo-light.svg' %}" alt="UzWire" />
+
+        </a>
+
+        <nav class="hidden md:flex items-center gap-4 text-sm">
+          <a class="uz-navlink" href="#about">{% trans "About" %}</a>
+          <a class="uz-navlink" href="#markets">{% trans "Markets" %}</a>
+          <a class="uz-navlink" href="#workflow">{% trans "How it works" %}</a>
+          <a class="uz-navlink" href="#pricing">{% trans "Pricing" %}</a>
+          <a class="uz-navlink" href="#blog">{% trans "Updates" %}</a>
+        </nav>
+
         <nav class="flex items-center gap-3 text-sm">
+          <form method="post" action="{% url 'set_language' %}" class="hidden sm:block">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+            <select name="language" onchange="this.form.submit()" class="px-2 py-1 rounded bg-slate-950 border border-slate-800 text-slate-200">
+              {% get_available_languages as LANGS %}
+              {% for code, name in LANGS %}
+                <option value="{{ code }}" {% if code == CURRENT_LANG %}selected{% endif %}>{{ name }}</option>
+              {% endfor %}
+            </select>
+          </form>
+
+          <button type="button" onclick="window.uzwireToggleTheme && window.uzwireToggleTheme()" class="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700">
+            {% trans "Theme" %}
+          </button>
+
           {% if user.is_authenticated %}
             <span class="text-slate-300">{{ user.username }}</span>
+            {% if billing_account %}
+              <span class="px-2 py-1 rounded border border-slate-800 text-xs {% if billing_account.is_paid_active %}text-emerald-300{% else %}text-slate-400{% endif %}">
+                {{ billing_account.plan|upper }}
+              </span>
+            {% endif %}
+            <a class="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700" href="{% url 'billing:account' %}">{% trans "Account" %}</a>
             <form method="post" action="{% url 'logout' %}">
               {% csrf_token %}
-              <button class="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700">Logout</button>
+              <button class="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700">{% trans "Logout" %}</button>
             </form>
           {% else %}
-            <a class="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700" href="{% url 'login' %}">Login</a>
-            <a class="px-3 py-1 rounded bg-indigo-600 hover:bg-indigo-500" href="{% url 'accounts:signup' %}">Register</a>
+            <a class="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700" href="{% url 'login' %}">{% trans "Login" %}</a>
+            <a class="px-3 py-1 rounded bg-emerald-600 hover:bg-emerald-500" href="{% url 'accounts:signup' %}">{% trans "Register" %}</a>
           {% endif %}
         </nav>
       </div>
     </header>
+
+    <div class="border-b border-slate-800 bg-slate-950/30">
+      <div class="max-w-6xl mx-auto px-4 py-2">
+        <div id="uzTicker" class="uz-ticker text-xs text-slate-400" data-loading="{% trans "Loading…" %}">
+          <div id="uzTickerTrack" class="uz-ticker-track">{% trans "Loading…" %}</div>
+        </div>
+      </div>
+    </div>
 
     <main class="max-w-6xl mx-auto px-4 py-8">
       {% if messages %}
@@ -39,8 +112,10 @@
 
     <footer class="border-t border-slate-800">
       <div class="max-w-6xl mx-auto px-4 py-6 text-xs text-slate-500">
-        MVP: auth + blog feed. Next: tasks/CRM/crypto advisory.
+        {% trans "UzWire is a personal finance and portfolio tracking platform for Uzbekistan. Market data is best-effort and for informational purposes only." %}
       </div>
     </footer>
+
+    <script src="{% static 'app.js' %}"></script>
   </body>
 </html>

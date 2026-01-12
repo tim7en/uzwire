@@ -1,0 +1,291 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: uzwire\n"
+"POT-Creation-Date: 2026-01-12 00:00+0000\n"
+"PO-Revision-Date: 2026-01-12 00:00+0000\n"
+"Language: uz\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "UzWire — Personal Finance & Portfolio Tracking"
+msgstr "UzWire — Шахсий молия ва портфель ҳисоботи"
+
+msgid "UzWire helps people in Uzbekistan track personal finances and portfolios: budgeting, savings, and performance vs markets — with local news and strategy notes."
+msgstr "UzWire Ўзбекистонда шахсий молия ва портфельни кузатишга ёрдам беради: бюджет, жамғарма ва бозорлар билан солиштириш — маҳаллий янгиликлар ва стратегия қайдлари билан."
+
+msgid "Track finances and portfolios, compare to markets, and follow trusted Uzbekistan news sources."
+msgstr "Молия ва портфельни кузатинг, бозорлар билан солиштиринг ва Ўзбекистоннинг ишончли янгилик манбаларини ўқинг."
+
+msgid "About"
+msgstr "Лойиҳа ҳақида"
+
+msgid "Markets"
+msgstr "Бозорлар"
+
+msgid "How it works"
+msgstr "Қандай ишлайди"
+
+msgid "Live markets"
+msgstr "Бозорлар онлайн"
+
+msgid "Pricing"
+msgstr "Нархлар"
+
+msgid "Updates"
+msgstr "Янгиланишлар"
+
+msgid "Theme"
+msgstr "Мавзу"
+
+msgid "Account"
+msgstr "Аккаунт"
+
+msgid "Logout"
+msgstr "Чиқиш"
+
+msgid "Login"
+msgstr "Кириш"
+
+msgid "Register"
+msgstr "Рўйхатдан ўтиш"
+
+msgid "UzWire is a personal finance and portfolio tracking platform for Uzbekistan. Market data is best-effort and for informational purposes only."
+msgstr "UzWire — Ўзбекистон учун шахсий молия ва портфель кузатув платформаси. Бозор маълумотлари фақат ахборот учун ва имкониятга кўра берилади."
+
+msgid "Personal finance for Uzbekistan"
+msgstr "Ўзбекистон учун шахсий молия"
+
+msgid "Track money, portfolios, and grow with data."
+msgstr "Пул, портфель ва натижани маълумот билан кузатинг."
+
+msgid "Budgeting, savings, and portfolio tracking in one place. Upload CSV or connect accounts (coming soon), compare performance vs markets, and follow Uzbekistan-focused economic news."
+msgstr "Бюджет, жамғарма ва портфель — бир жойда. CSV юкланг ёки ҳисобларни уланг (тез орада), бозорлар билан солиштиринг ва Ўзбекистон иқтисодий янгиликларини кузатинг."
+
+msgid "Green means positive returns — we highlight growth and risk clearly."
+msgstr "Яшил — ижобий даромад: ўсиш ва риск аниқ кўрсатилади."
+
+msgid "Not investment advice. Data is informational and best‑effort."
+msgstr "Инвестицион маслаҳат эмас. Маълумотлар ахборот учун ва имкониятга кўра."
+
+msgid "Personal finance + portfolio tracking"
+msgstr "Шахсий молия + портфель кузатув"
+
+msgid "Track budgeting, savings, and investments. Upload CSV and monitor P&L, allocation, and risk over time."
+msgstr "Бюджет, жамғарма ва инвестицияларни кузатинг. CSV юкланг ва даромад/зарар, тақсимот ва рискни вақт бўйича кўринг."
+
+msgid "Compare across markets"
+msgstr "Бозорлар билан солиштириш"
+
+msgid "Benchmark your results vs indices, commodities, and crypto for the same dates."
+msgstr "Натижаларингизни индекслар, товарлар ва крипто билан ўша саналарда солиштиринг."
+
+msgid "Guidance & alerts"
+msgstr "Йўл-йўриқ ва огоҳлантиришлар"
+
+msgid "Daily notes and alerts for portfolio management. Higher-frequency insights are paid."
+msgstr "Портфель бошқаруви учун кунлик қайдлар ва огоҳлантиришлар. Юқори частотали инсайтлар пуллик."
+
+msgid "Crypto, indices, and commodities (best-effort, cached)."
+msgstr "Крипто, индекслар ва товарлар (кэшланган, имкониятга кўра)."
+
+msgid "News"
+msgstr "Янгиликлар"
+
+msgid "Charts below are 30D price series (UTC)."
+msgstr "Қуйидаги графиклар — 30 кунлик нархлар (UTC)."
+
+msgid "A simple process: track → benchmark → improve."
+msgstr "Оддий жараён: кузатиш → солиштириш → яхшилаш."
+
+msgid "Connect accounts"
+msgstr "Ҳисобларни улаш"
+
+msgid "Upload CSV"
+msgstr "CSV юклаш"
+
+msgid "Strategy updates"
+msgstr "Стратегия янгиланишлари"
+
+msgid "Connect"
+msgstr "Улаш"
+
+msgid "Link accounts (coming soon) to sync balances and transactions automatically."
+msgstr "Ҳисобларни уланг (тез орада) — баланс ва операциялар автоматик синхрон бўлади."
+
+msgid "Unified view across banks, brokers, and wallets"
+msgstr "Банк, брокер ва ҳамёнлар бўйича ягона кўриниш"
+
+msgid "Allocation, drawdowns, and performance attribution"
+msgstr "Тақсимот, просадка ва натижа таҳлили"
+
+msgid "Security-first design (least privilege)"
+msgstr "Хавфсизлик биринчи (минимал ҳуқуқлар)"
+
+msgid "Bank/broker connectors and family accounts."
+msgstr "Банк/брокер интеграциялари ва оила аккаунтлари."
+
+msgid "Upload a CSV export or fill a template, and get a report vs benchmarks for the same dates."
+msgstr "CSV экспортни юкланг ёки шаблонни тўлдиринг ва ўша саналарда солиштирма ҳисобот олинг."
+
+msgid "Performance vs indices/commodities/crypto"
+msgstr "Индекс/товар/крипто билан натижа"
+
+msgid "Period analytics (weekly/monthly/custom)"
+msgstr "Давр таҳлили (ҳафталик/ойлик/ихтиёрий)"
+
+msgid "Detect concentration risk"
+msgstr "Концентрация рискини аниқлаш"
+
+msgid "We’ll add a downloadable CSV template and uploader next."
+msgstr "Кейин CSV шаблон ва юкловчини қўшамиз."
+
+msgid "Daily notes are included for paid users. Higher frequency (hourly/minute) is commercial."
+msgstr "Кунлик қайдлар пуллик фойдаланувчилар учун. Юқори частота (соатлик/дақиқалик) — коммерция." 
+
+msgid "Risk-aware targets and rebalancing ideas"
+msgstr "Рискни ҳисобга олган мақсадлар ва ребаланс ғоялари"
+
+msgid "Market regime notes"
+msgstr "Бозор режими қайдлари"
+
+msgid "Explainable recommendations"
+msgstr "Тушунарли тавсиялар"
+
+msgid "Recommendations are informational; you control all decisions."
+msgstr "Тавсиялар ахборот учун; қарорни сиз қабул қиласиз."
+
+msgid "Start free. Pay for strategy and high-frequency insights."
+msgstr "Бепул бошланг. Стратегия ва юқори частотали инсайтлар учун тўланади."
+
+msgid "Free"
+msgstr "Бепул"
+
+msgid "Tracking"
+msgstr "Кузатув"
+
+msgid "Basic tracking + benchmarks + local news."
+msgstr "Базавий кузатув + солиштириш + маҳаллий янгиликлар."
+
+msgid "Includes:"
+msgstr "Ичига олади:"
+
+msgid "Dashboard + benchmarking"
+msgstr "Дашборд + солиштириш"
+
+msgid "CSV import (upcoming)"
+msgstr "CSV импорт (тез орада)"
+
+msgid "News + watchlists"
+msgstr "Янгиликлар + рўйхатлар"
+
+msgid "Pro"
+msgstr "Pro"
+
+msgid "Daily strategy"
+msgstr "Кунлик стратегия"
+
+msgid "Daily notes and portfolio insights."
+msgstr "Кунлик қайдлар ва портфель инсайтлари."
+
+msgid "Daily strategy updates"
+msgstr "Кунлик стратегия янгиланиши"
+
+msgid "Reports by date range"
+msgstr "Сана оралиғи бўйича ҳисоботлар"
+
+msgid "Risk and allocation insights"
+msgstr "Риск ва тақсимот инсайтлари"
+
+msgid "Commercial"
+msgstr "Коммерция"
+
+msgid "High-frequency"
+msgstr "Юқори частота"
+
+msgid "Hourly/minute signals and integrations for teams."
+msgstr "Жамоалар учун соатлик/дақиқалик сигналлар ва интеграциялар."
+
+msgid "High-frequency updates"
+msgstr "Юқори частотали янгиланишлар"
+
+msgid "Organization accounts"
+msgstr "Ташкилот аккаунтлари"
+
+msgid "API + webhooks (future)"
+msgstr "API + вебхуклар (кейинчалик)"
+
+msgid "Finance • Economy • Policy • Crypto"
+msgstr "Молия • Иқтисод • Сиёсат • Крипто"
+
+msgid "All news"
+msgstr "Барча янгиликлар"
+
+msgid "Product notes and research posts (newest first)."
+msgstr "Маҳсулот қайдлари ва таҳлиллар (энги янгиси аввал)."
+
+msgid "Latest post"
+msgstr "Охирги пост"
+
+msgid "Back"
+msgstr "Ортга"
+
+msgid "Published"
+msgstr "Чоп этилди"
+
+msgid "Sign in"
+msgstr "Кириш"
+
+msgid "No account?"
+msgstr "Аккаунт йўқми?"
+
+msgid "Create account"
+msgstr "Аккаунт яратиш"
+
+msgid "Username"
+msgstr "Фойдаланувчи номи"
+
+msgid "Password"
+msgstr "Парол"
+
+msgid "Confirm password"
+msgstr "Паролни тасдиқлаш"
+
+msgid "Already have an account?"
+msgstr "Аккаунт борми?"
+
+msgid "Headlines from public RSS feeds. Clicking opens the original source."
+msgstr "Публич RSS сарлавҳалари. Босилса, манба очилади."
+
+msgid "No news items."
+msgstr "Янгилик йўқ."
+
+msgid "Check server outbound internet access, or update NEWS_FEEDS."
+msgstr "Сервер интернетга чиқишини текширинг ёки NEWS_FEEDS ни янгиланг."
+
+msgid "Plan"
+msgstr "Тариф"
+
+msgid "Paid until"
+msgstr "Тўланган муддат"
+
+msgid "Balance"
+msgstr "Баланс"
+
+msgid "cents"
+msgstr "тийин"
+
+msgid "Payments are managed via admin for now. Payment provider integration comes next."
+msgstr "Тўловлар ҳозирча админ орқали бошқарилади. Кейин тўлов провайдери интеграцияси қўшилади."
+
+msgid "This feature requires a paid plan."
+msgstr "Бу функция пуллик тарифни талаб қилади."
+
+msgid "Loading…"
+msgstr "Юкланмоқда…"
+
+msgid "Updated"
+msgstr "Янгиланди"
+
+msgid "Unavailable"
+msgstr "Мавжуд эмас"

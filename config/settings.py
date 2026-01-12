@@ -48,16 +48,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
 
     'accounts',
     'blog',
     'news',
+    'markets',
+    'billing',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -78,6 +82,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'billing.context_processors.billing_account',
             ],
         },
     },
@@ -119,7 +124,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
+
+LANGUAGES = [
+    ("en", "English"),
+    ("ru", "Русский"),
+    ("uz", "Oʻzbekcha (Кирилл)"),
+]
+
+LOCALE_PATHS = [BASE_DIR / "locale"]
 
 TIME_ZONE = 'Asia/Tashkent'
 
@@ -133,6 +146,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 STORAGES = {
     "staticfiles": {
@@ -151,6 +166,22 @@ CACHES = {
 }
 
 NEWS_FEEDS = [
+    {
+        "name": "Gazeta.uz (RU)",
+        "url": "https://www.gazeta.uz/ru/rss/",
+    },
+    {
+        "name": "Gazeta.uz (OZ)",
+        "url": "https://www.gazeta.uz/oz/rss/",
+    },
+    {
+        "name": "Spot.uz (RU)",
+        "url": "https://www.spot.uz/ru/rss/",
+    },
+    {
+        "name": "Kun.uz",
+        "url": "https://kun.uz/news/rss",
+    },
     {
         "name": "NYT Business",
         "url": "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml",

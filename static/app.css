@@ -1,0 +1,137 @@
+/* Theme variables + light/dark overrides (loaded after Tailwind CDN) */
+
+:root {
+  --bg: #020617;            /* slate-950 */
+  --text: #f8fafc;          /* slate-50  */
+  --muted: #94a3b8;         /* slate-400 */
+  --muted-2: #64748b;       /* slate-500 */
+  --surface: #0f172a;       /* slate-900 */
+  --surface-2: #020617;     /* slate-950 */
+  --border: #1e293b;        /* slate-800 */
+  --accent: #22c55e;        /* green-500 */
+  --accent-2: #16a34a;      /* green-600 */
+}
+
+html.theme-light {
+  --bg: #f8fafc;
+  --text: #0f172a;
+  --muted: #334155;
+  --muted-2: #475569;
+  --surface: #ffffff;
+  --surface-2: #f1f5f9;
+  --border: #e2e8f0;
+  --accent: #16a34a;
+  --accent-2: #15803d;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* Override common Tailwind color utility classes in light theme */
+html.theme-light .bg-slate-950 { background-color: var(--bg) !important; }
+html.theme-light .bg-slate-900 { background-color: var(--surface) !important; }
+html.theme-light .bg-slate-800 { background-color: var(--surface-2) !important; }
+html.theme-light .bg-slate-950\/80 { background-color: rgb(248 250 252 / 0.80) !important; }
+html.theme-light .bg-slate-950\/30 { background-color: rgb(248 250 252 / 0.30) !important; }
+html.theme-light .border-slate-800 { border-color: var(--border) !important; }
+html.theme-light .border-slate-700 { border-color: var(--border) !important; }
+html.theme-light .text-slate-100,
+html.theme-light .text-slate-200,
+html.theme-light .text-slate-300 { color: var(--text) !important; }
+html.theme-light .text-slate-400 { color: var(--muted) !important; }
+html.theme-light .text-slate-500 { color: var(--muted-2) !important; }
+
+/* In light theme, Tailwind's hover:text-white becomes invisible on white surfaces */
+html.theme-light .hover\:text-white:hover { color: var(--text) !important; }
+
+/* Gradients used by the landing hero/cards */
+html.theme-light .from-slate-900 {
+  --tw-gradient-from: #ffffff !important;
+  --tw-gradient-to: rgb(255 255 255 / 0) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+html.theme-light .via-slate-950 {
+  --tw-gradient-stops: var(--tw-gradient-from), #f1f5f9, var(--tw-gradient-to) !important;
+}
+html.theme-light .to-black {
+  --tw-gradient-to: #f8fafc !important;
+}
+html.theme-light .to-slate-950 {
+  --tw-gradient-to: #f1f5f9 !important;
+}
+
+/* Accent helpers */
+.uz-accent { color: var(--accent); }
+.uz-accent-bg { background: var(--accent); }
+.uz-accent-border { border-color: var(--accent); }
+
+/* Scroll-reactive background */
+.uz-orbit {
+  position: fixed;
+  inset: -20vmax;
+  pointer-events: none;
+  z-index: -1;
+  filter: blur(50px);
+  opacity: 0.55;
+  transform: rotate(var(--uz-spin, 0deg));
+  transition: opacity 200ms ease;
+}
+
+html.theme-light .uz-orbit { opacity: 0.35; }
+
+.uz-orbit::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    conic-gradient(from 0deg,
+      rgba(34, 197, 94, 0.35),
+      rgba(16, 185, 129, 0.15),
+      rgba(59, 130, 246, 0.10),
+      rgba(34, 197, 94, 0.35)
+    );
+}
+
+/* Logo switching */
+.logo-light { display: none; }
+html.theme-light .logo-light { display: inline-block; }
+html.theme-light .logo-dark { display: none; }
+
+/* Small polish */
+.uz-card { border: 1px solid var(--border); background: var(--surface); }
+.uz-card-2 { border: 1px solid var(--border); background: var(--surface-2); }
+.uz-link { color: var(--accent); }
+.uz-link:hover { color: var(--accent-2); }
+
+/* Header nav */
+.uz-navlink {
+  color: var(--muted);
+  transition: color 150ms ease;
+}
+.uz-navlink:hover {
+  color: var(--text);
+}
+
+/* Market ticker (marquee) */
+.uz-ticker {
+  overflow: hidden;
+  white-space: nowrap;
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.uz-ticker-track {
+  display: inline-block;
+  padding-left: 100%;
+  animation: uz-ticker-scroll var(--uz-ticker-duration, 40s) linear infinite;
+}
+
+.uz-ticker:hover .uz-ticker-track {
+  animation-play-state: paused;
+}
+
+@keyframes uz-ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}

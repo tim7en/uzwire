@@ -19,6 +19,15 @@ services:
       db:
         condition: service_healthy
 
+  scheduler:
+    build: .
+    env_file:
+      - .env.docker
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["sh", "-c", "while true; do python manage.py update_markets; sleep 300; done"]
+
   caddy:
     image: caddy:2
     restart: unless-stopped

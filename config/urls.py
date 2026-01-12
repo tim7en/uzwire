@@ -14,13 +14,51 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
+from django.contrib.sitemaps.views import sitemap
+from django.http import HttpResponse
 from django.urls import include, path
+
+from .sitemaps import BlogPostSitemap, StaticViewSitemap
+
+
+sitemaps = {
+    "static": StaticViewSitemap,
+    "posts": BlogPostSitemap,
+}
+
+
+def robots_txt(_request):
+    content = "\n".join(
+        [
+            "User-agent: *",
+            "Allow: /",
+            f"Sitemap: {_request.build_absolute_uri('/sitemap.xml')}",
+        ]
+    )
+    content += "\n"
+    return HttpResponse(content, content_type="text/plain")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("i18n/", include("django.conf.urls.i18n")),
+    path("robots.txt", robots_txt, name="robots_txt"),
+    path(
+        "sitemap.xml",
+        sitemap,
+        {"sitemaps": sitemaps},
+        name="django.contrib.sitemaps.views.sitemap",
+    ),
+    path("", include("markets.urls")),
+]
+
+
+urlpatterns += i18n_patterns(
     path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/", include("accounts.urls")),
+    path("", include("billing.urls")),
     path("", include("news.urls")),
     path("", include("blog.urls")),
-]
+    prefix_default_language=False,
+)

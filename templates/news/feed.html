@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}News · UzSite{% endblock %}
+{% block title %}{% trans "News" %} · UzWire{% endblock %}
 
 {% block content %}
   <div class="flex items-end justify-between gap-4 mb-6">
     <div>
       <h1 class="text-2xl font-semibold">News</h1>
-      <p class="text-slate-400 text-sm">Headlines from public RSS feeds. Click opens original source.</p>
+      <p class="text-slate-400 text-sm">{% trans "Headlines from public RSS feeds. Clicking opens the original source." %}</p>
     </div>
   </div>
 
@@ -23,8 +24,8 @@
       </a>
     {% empty %}
       <div class="rounded-xl border border-slate-800 bg-slate-900 p-5">
-        <div class="font-medium">No news items.</div>
-        <div class="text-sm text-slate-400 mt-1">Check server outbound internet access, or update `NEWS_FEEDS`.</div>
+        <div class="font-medium">{% trans "No news items." %}</div>
+        <div class="text-sm text-slate-400 mt-1">{% trans "Check server outbound internet access, or update NEWS_FEEDS." %}</div>
       </div>
     {% endfor %}
   </div>
