@@ -29,6 +29,34 @@ body {
   color: var(--text);
 }
 
+/* Motion helpers (professional, subtle) */
+@media (prefers-reduced-motion: reduce) {
+  .uz-fadein,
+  .uz-hoverlift {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.uz-fadein {
+  animation: uz-fadein 420ms ease-out both;
+}
+
+@keyframes uz-fadein {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.uz-hoverlift {
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+
+.uz-hoverlift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+  border-color: rgba(34, 197, 94, 0.25);
+}
+
 /* Override common Tailwind color utility classes in light theme */
 html.theme-light .bg-slate-950 { background-color: var(--bg) !important; }
 html.theme-light .bg-slate-900 { background-color: var(--surface) !important; }

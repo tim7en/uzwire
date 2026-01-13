@@ -157,8 +157,8 @@ STORAGES = {
     }
 }
 
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "dashboard:home"
+LOGOUT_REDIRECT_URL = "blog:home"
 
 CACHES = {
     "default": {

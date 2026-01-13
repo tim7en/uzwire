@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n %}
+{% load i18n utils %}
 
 {% block title %}{% trans "UzWire — Dashboard" %}{% endblock %}
 
@@ -125,7 +125,7 @@ spy.us 30"></textarea>
           <div>
             <div class="text-sm text-slate-400">{% trans "What if" %}</div>
             <div class="text-lg font-semibold mt-1">
-              {% if selected_portfolio %}{{ selected_portfolio.name }}{% else %}{% trans "Preset: Semiconductors" %}{% endif %}
+              {% if selected_portfolio %}{{ selected_portfolio.name }}{% else %}{% trans "Preset:" %} {{ selected_preset_label }}{% endif %}
             </div>
           </div>
           {% if portfolios %}
@@ -156,16 +156,18 @@ spy.us 30"></textarea>
                 <tr>
                   <td class="py-2 text-slate-300">{{ k|upper }}</td>
                   <td class="py-2 text-right">
-                    {% if v.total_return is not None %}
-                      <span class="{% if v.total_return >= 0 %}text-emerald-300{% else %}text-rose-300{% endif %}">{{ v.total_return|floatformat:2 }}%</span>
+                    {% if v.end_value is not None %}
+                      <div class="font-semibold">${{ v.end_value|floatformat:0 }}</div>
+                      <div class="text-xs text-slate-500">{% trans "CAGR" %}: {% if v.cagr_pct is not None %}{{ v.cagr_pct|floatformat:2 }}%{% else %}—{% endif %}</div>
                     {% else %}
                       <span class="text-slate-500">—</span>
                     {% endif %}
                   </td>
                   <td class="py-2 text-right">
                     {% with b=benchmarks.spx|get_item:k %}
-                      {% if b.total_return is not None %}
-                        <span class="{% if b.total_return >= 0 %}text-emerald-300{% else %}text-rose-300{% endif %}">{{ b.total_return|floatformat:2 }}%</span>
+                      {% if b.end_value is not None %}
+                        <div class="font-semibold">${{ b.end_value|floatformat:0 }}</div>
+                        <div class="text-xs text-slate-500">{% trans "CAGR" %}: {% if b.cagr_pct is not None %}{{ b.cagr_pct|floatformat:2 }}%{% else %}—{% endif %}</div>
                       {% else %}
                         <span class="text-slate-500">—</span>
                       {% endif %}
@@ -173,8 +175,9 @@ spy.us 30"></textarea>
                   </td>
                   <td class="py-2 text-right">
                     {% with b=benchmarks.ndx|get_item:k %}
-                      {% if b.total_return is not None %}
-                        <span class="{% if b.total_return >= 0 %}text-emerald-300{% else %}text-rose-300{% endif %}">{{ b.total_return|floatformat:2 }}%</span>
+                      {% if b.end_value is not None %}
+                        <div class="font-semibold">${{ b.end_value|floatformat:0 }}</div>
+                        <div class="text-xs text-slate-500">{% trans "CAGR" %}: {% if b.cagr_pct is not None %}{{ b.cagr_pct|floatformat:2 }}%{% else %}—{% endif %}</div>
                       {% else %}
                         <span class="text-slate-500">—</span>
                       {% endif %}
@@ -184,7 +187,64 @@ spy.us 30"></textarea>
               {% endfor %}
             </tbody>
           </table>
-          <div class="text-xs text-slate-500 mt-3">{% trans "Daily total return uses best-effort Stooq history." %}</div>
+          <div class="text-xs text-slate-500 mt-3">{% trans "What-if assumes a $10,000 investment and uses best-effort daily history." %}</div>
+        </div>
+
+        <div class="mt-4 grid gap-3 md:grid-cols-6">
+          <div class="rounded-xl border border-slate-800 bg-slate-950 p-4 uz-hoverlift">
+            <div class="text-xs text-slate-400">{% trans "Total return" %}</div>
+            <div class="text-lg font-semibold mt-1">
+              {% if insights.total_return_pct is not None %}{{ insights.total_return_pct|floatformat:2 }}%{% else %}—{% endif %}
+            </div>
+          </div>
+          <div class="rounded-xl border border-slate-800 bg-slate-950 p-4 uz-hoverlift">
+            <div class="text-xs text-slate-400">{% trans "CAGR" %}</div>
+            <div class="text-lg font-semibold mt-1">
+              {% if insights.cagr_pct is not None %}{{ insights.cagr_pct|floatformat:2 }}%{% else %}—{% endif %}
+            </div>
+          </div>
+          <div class="rounded-xl border border-slate-800 bg-slate-950 p-4 uz-hoverlift">
+            <div class="text-xs text-slate-400">{% trans "Max drawdown" %}</div>
+            <div class="text-lg font-semibold mt-1">
+              {% if insights.max_drawdown_pct is not None %}{{ insights.max_drawdown_pct|floatformat:2 }}%{% else %}—{% endif %}
+            </div>
+            {% if insights.drawdown %}
+              <div class="text-xs text-slate-500 mt-1">
+                {{ insights.drawdown.peak_date }} → {{ insights.drawdown.trough_date }}
+              </div>
+            {% endif %}
+          </div>
+          <div class="rounded-xl border border-slate-800 bg-slate-950 p-4 uz-hoverlift">
+            <div class="text-xs text-slate-400">{% trans "Volatility" %}</div>
+            <div class="text-lg font-semibold mt-1">
+              {% if insights.vol_pct is not None %}{{ insights.vol_pct|floatformat:2 }}%{% else %}—{% endif %}
+            </div>
+          </div>
+
+          <div class="rounded-xl border border-slate-800 bg-slate-950 p-4 uz-hoverlift">
+            <div class="text-xs text-slate-400">{% trans "Correlation" %} (S&P 500)</div>
+            <div class="text-lg font-semibold mt-1">
+              {% if insights.corr_spx is not None %}{{ insights.corr_spx|floatformat:2 }}{% else %}—{% endif %}
+            </div>
+          </div>
+
+          <div class="rounded-xl border border-slate-800 bg-slate-950 p-4 uz-hoverlift">
+            <div class="text-xs text-slate-400">{% trans "Best / worst month" %}</div>
+            <div class="text-sm font-semibold mt-1">
+              {% if insights.best_worst_month %}
+                <div>
+                  {% trans "Best" %}: {{ insights.best_worst_month.best.year }}-{{ insights.best_worst_month.best.month }}
+                  ({{ insights.best_worst_month.best.return_pct|floatformat:2 }}%)
+                </div>
+                <div class="text-slate-300">
+                  {% trans "Worst" %}: {{ insights.best_worst_month.worst.year }}-{{ insights.best_worst_month.worst.month }}
+                  ({{ insights.best_worst_month.worst.return_pct|floatformat:2 }}%)
+                </div>
+              {% else %}
+                —
+              {% endif %}
+            </div>
+          </div>
         </div>
 
         <div class="mt-4 h-44">
@@ -257,12 +317,13 @@ spy.us 30"></textarea>
       const muted = styles.getPropertyValue('--muted').trim() || '#94a3b8';
       const grid = styles.getPropertyValue('--border').trim() || '#1e293b';
 
-      const pid = new URLSearchParams(window.location.search).get('portfolio');
-      const url = pid ? `/api/app/portfolio/series/?portfolio=${encodeURIComponent(pid)}&days=1260` : `/api/app/portfolio/series/?portfolio=0`;
+      const params = new URLSearchParams(window.location.search);
+      const pid = params.get('portfolio');
+      const preset = params.get('preset') || '{{ selected_preset|escapejs }}';
+      const url = pid ? `/api/app/portfolio/series/?portfolio=${encodeURIComponent(pid)}&days=1260` : `/api/app/portfolio/series/?preset=${encodeURIComponent(preset)}&days=1260`;
 
       async function load(){
         try {
-          if (!pid) return; // only show for saved portfolios
           const resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
           if (!resp.ok) return;
           const data = await resp.json();
@@ -270,14 +331,23 @@ spy.us 30"></textarea>
           if (!series.length) return;
           const labels = series.map(p => new Date(p.t).toLocaleDateString(document.documentElement.lang || undefined));
           const values = series.map(p => p.p);
+          const spx = series.map(p => p.spx);
+          const ndx = series.map(p => p.ndx);
 
           new Chart(canvas.getContext('2d'), {
             type: 'line',
-            data: { labels, datasets: [{ label: 'Portfolio', data: values, borderColor: accent, backgroundColor: accent, tension: 0.25, pointRadius: 0 }] },
+            data: {
+              labels,
+              datasets: [
+                { label: 'Portfolio', data: values, borderColor: accent, backgroundColor: accent, tension: 0.25, pointRadius: 0 },
+                { label: 'S&P 500', data: spx, borderColor: '#60a5fa', backgroundColor: '#60a5fa', tension: 0.25, pointRadius: 0 },
+                { label: 'Nasdaq', data: ndx, borderColor: '#f59e0b', backgroundColor: '#f59e0b', tension: 0.25, pointRadius: 0 },
+              ]
+            },
             options: {
               responsive: true,
               maintainAspectRatio: false,
-              plugins: { legend: { display: false } },
+              plugins: { legend: { display: true, labels: { color: muted } } },
               scales: {
                 x: { ticks: { color: muted, maxTicksLimit: 6 }, grid: { color: grid } },
                 y: { ticks: { color: muted }, grid: { color: grid } },

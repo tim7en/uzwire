@@ -12,7 +12,18 @@ from markets.models import MarketLatest
 
 from .forms import CreatePortfolioForm
 from .models import Portfolio, PortfolioItem
-from .services import PRESET_PORTFOLIOS, backtest_weighted_index, normalize_allocations, total_return
+from .services import (
+    PRESET_PORTFOLIOS,
+    annualized_volatility,
+    backtest_weighted_index,
+    best_worst_month,
+    cagr,
+    correlation,
+    max_drawdown,
+    max_drawdown_window,
+    normalize_allocations,
+    total_return,
+)
 
 
 def _parse_custom_lines(text: str) -> list[tuple[str, float]]:
@@ -52,13 +63,19 @@ def home(request):
             selected_portfolio = None
 
     # Default backtest: Semiconductor preset
-    allocations = normalize_allocations(PRESET_PORTFOLIOS["semi"]["items"])
+    selected_preset = request.GET.get("preset") or "semi"
+    if selected_preset not in PRESET_PORTFOLIOS:
+        selected_preset = "semi"
+    allocations = normalize_allocations(PRESET_PORTFOLIOS[selected_preset]["items"])
 
     if selected_portfolio and portfolio_items:
         allocations = normalize_allocations([(it.symbol, it.weight) for it in portfolio_items])
 
     days_15y = 4200
     series = backtest_weighted_index(allocations, days=days_15y)
+
+    def pct(x):
+        return (x * 100.0) if x is not None else None
 
     def slice_last(n: int):
         if len(series) < n:
@@ -71,21 +88,55 @@ def home(request):
         "15y": 3780,
     }
 
-    portfolio_backtests = {
-        k: {
-            "days": v,
-            "total_return": total_return(slice_last(v) or []),
+    def what_if_row(s, days: int):
+        # assumes index series starting at 100
+        seg = s[-days:] if s and len(s) >= days else []
+        tr = total_return(seg)
+        cg = cagr(seg)
+        end_value = None
+        if tr is not None:
+            end_value = 10000.0 * (1.0 + tr)
+        return {
+            "days": days,
+            "total_return": tr,
+            "cagr": cg,
+            "total_return_pct": pct(tr),
+            "cagr_pct": pct(cg),
+            "end_value": end_value,
         }
-        for k, v in horizons.items()
-    }
 
-    # Benchmarks (best-effort)
-    spx = backtest_weighted_index(normalize_allocations([("^spx", 1.0)]), days=days_15y)
-    ndx = backtest_weighted_index(normalize_allocations([("^ndx", 1.0)]), days=days_15y)
+    portfolio_backtests = {k: what_if_row(series, v) for k, v in horizons.items()}
+
+    # Benchmarks (more reliable proxies)
+    spx = backtest_weighted_index(normalize_allocations([("spy.us", 1.0)]), days=days_15y)
+    ndx = backtest_weighted_index(normalize_allocations([("qqq.us", 1.0)]), days=days_15y)
 
     bench = {
-        "spx": {k: {"total_return": total_return((spx[-v:] if len(spx) >= v else []) )} for k, v in horizons.items()},
-        "ndx": {k: {"total_return": total_return((ndx[-v:] if len(ndx) >= v else []) )} for k, v in horizons.items()},
+        "spx": {k: what_if_row(spx, v) for k, v in horizons.items()},
+        "ndx": {k: what_if_row(ndx, v) for k, v in horizons.items()},
+    }
+
+    dd_info = max_drawdown_window(series)
+    bw = best_worst_month(series)
+    if bw:
+        try:
+            bw["best"]["return_pct"] = pct(bw["best"].get("return"))
+            bw["worst"]["return_pct"] = pct(bw["worst"].get("return"))
+        except Exception:
+            pass
+    insights = {
+        "total_return": total_return(series),
+        "cagr": cagr(series),
+        "max_drawdown": max_drawdown(series),
+        "vol": annualized_volatility(series),
+        "total_return_pct": pct(total_return(series)),
+        "cagr_pct": pct(cagr(series)),
+        "max_drawdown_pct": pct(max_drawdown(series)),
+        "vol_pct": pct(annualized_volatility(series)),
+        "corr_spx": correlation(series, spx),
+        "corr_ndx": correlation(series, ndx),
+        "drawdown": dd_info,
+        "best_worst_month": bw,
     }
 
     form = CreatePortfolioForm()
@@ -101,8 +152,11 @@ def home(request):
             "portfolio_items": portfolio_items,
             "portfolio_backtests": portfolio_backtests,
             "benchmarks": bench,
+            "insights": insights,
             "form": form,
             "presets": PRESET_PORTFOLIOS,
+            "selected_preset": selected_preset,
+            "selected_preset_label": PRESET_PORTFOLIOS[selected_preset]["label"],
         },
     )
 
@@ -142,25 +196,49 @@ def create_portfolio(request):
 @login_required
 def portfolio_series(request):
     pid = request.GET.get("portfolio")
-    if not pid:
-        return JsonResponse({"error": "missing portfolio"}, status=400)
+    preset = request.GET.get("preset")
 
-    try:
-        p = Portfolio.objects.get(id=int(pid), user=request.user)
-    except Exception:
-        return JsonResponse({"error": "not found"}, status=404)
-
-    items = list(p.items.all())
-    allocs = normalize_allocations([(it.symbol, it.weight) for it in items])
+    allocs = []
+    portfolio_id = None
+    if pid and pid.isdigit() and int(pid) > 0:
+        try:
+            p = Portfolio.objects.get(id=int(pid), user=request.user)
+        except Exception:
+            return JsonResponse({"error": "not found"}, status=404)
+        items = list(p.items.all())
+        allocs = normalize_allocations([(it.symbol, it.weight) for it in items])
+        portfolio_id = p.id
+    else:
+        preset = preset or "semi"
+        if preset not in PRESET_PORTFOLIOS:
+            preset = "semi"
+        allocs = normalize_allocations(PRESET_PORTFOLIOS[preset]["items"])
+        portfolio_id = 0
 
     days = int(request.GET.get("days", "1260"))
     days = max(30, min(days, 4200))
     series = backtest_weighted_index(allocs, days=days)
+    spx = backtest_weighted_index(normalize_allocations([("spy.us", 1.0)]), days=days)
+    ndx = backtest_weighted_index(normalize_allocations([("qqq.us", 1.0)]), days=days)
+
+    # Align by common dates for clean multi-line chart.
+    map_p = {d: v for d, v in series}
+    map_spx = {d: v for d, v in spx}
+    map_ndx = {d: v for d, v in ndx}
+    common = sorted(set(map_p.keys()) & set(map_spx.keys()) & set(map_ndx.keys()))
 
     return JsonResponse(
         {
-            "portfolio": p.id,
+            "portfolio": portfolio_id,
             "days": days,
-            "series": [{"t": int(datetime.combine(d, datetime.min.time(), tzinfo=timezone.utc).timestamp() * 1000), "p": v} for d, v in series],
+            "series": [
+                {
+                    "t": int(datetime.combine(d, datetime.min.time(), tzinfo=timezone.utc).timestamp() * 1000),
+                    "p": map_p[d],
+                    "spx": map_spx[d],
+                    "ndx": map_ndx[d],
+                }
+                for d in common
+            ],
         }
     )
